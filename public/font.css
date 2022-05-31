@@ -1,0 +1,18 @@
+/*引入字体*/
+@font-face {
+    font-family: "Pacifico";
+    src: url("../font/Pacifico.ttf");
+}
+
+@font-face {
+    font-family: "Quicksand";
+    font-weight: 700;
+    src: url("../font/Quicksand-Bold.ttf");
+}
+
+@font-face {
+    font-family: "Quicksand";
+    font-weight: 400;
+    src: url("../font/Quicksand-Light.ttf");
+}
+

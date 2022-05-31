@@ -1,0 +1,86 @@
+{
+  "id": "",
+  "name": "",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "76992",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "f00d9",
+      "unicode_decimal": 983257
+    },
+    {
+      "icon_id": "145458",
+      "name": "音乐",
+      "font_class": "yinle",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "2076218",
+      "name": "播放2",
+      "font_class": "bofang",
+      "unicode": "e87c",
+      "unicode_decimal": 59516
+    },
+    {
+      "icon_id": "2076319",
+      "name": "播放",
+      "font_class": "bofang1",
+      "unicode": "e8a3",
+      "unicode_decimal": 59555
+    },
+    {
+      "icon_id": "3103172",
+      "name": "排行榜",
+      "font_class": "paihangbang",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
+      "icon_id": "5387521",
+      "name": "菜单",
+      "font_class": "caidan",
+      "unicode": "eaf1",
+      "unicode_decimal": 60145
+    },
+    {
+      "icon_id": "10129487",
+      "name": "Adobe Fm",
+      "font_class": "AdobeFm",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
+      "icon_id": "11391498",
+      "name": "歌单",
+      "font_class": "gedan",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "11428232",
+      "name": "排行榜-01",
+      "font_class": "paihangbang-",
+      "unicode": "e60c",
+      "unicode_decimal": 58892
+    },
+    {
+      "icon_id": "25937980",
+      "name": "歌单",
+      "font_class": "gedan1",
+      "unicode": "e502",
+      "unicode_decimal": 58626
+    },
+    {
+      "icon_id": "29355825",
+      "name": "每日推荐",
+      "font_class": "meirituijian",
+      "unicode": "e6e8",
+      "unicode_decimal": 59112
+    }
+  ]
+}
