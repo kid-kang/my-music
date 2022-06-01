@@ -1,5 +1,5 @@
 <template>
-  <Navlink></Navlink>
+  <Navlink v-show="$route.meta.istrun"/>
   <router-view />
 </template>
 

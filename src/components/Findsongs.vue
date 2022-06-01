@@ -35,12 +35,14 @@ export default {
   name: "Findsongs",
   data () {
     return {
-      findList: [],
+      findList: JSON.parse(sessionStorage.getItem("findList")),
     }
   },
   created () {
+    if (sessionStorage.getItem("findList")) return
     this.axios.get("/personalized?limit=10").then(res => {
       this.findList = res.result
+      sessionStorage.setItem("findList", JSON.stringify(res.result))
     })
   }
 }
@@ -74,11 +76,11 @@ export default {
         h3 {
           position: absolute;
           width: 100%;
-          height: 0.6rem;
+          height: 0.75rem;
           text-align: center;
           overflow: hidden;
           text-overflow: ellipsis;
-          top: 2.9rem;
+          top: 2.5rem;
           color: white;
           font-size: 0.29rem;
         }

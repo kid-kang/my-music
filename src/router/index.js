@@ -5,17 +5,26 @@ const routes = [
   {
     path: '/',
     name: 'Find',
-    component: Find
+    component: Find,
+    meta:{
+      istrun:true
+    }
   },
   {
     path: '/me',
     name: 'Me',
-    component: () => import("@/views/Me.vue")
+    component: () => import("@/views/Me.vue"),
+    meta:{
+      istrun:true
+    }
   },
   {
     path: '/songList',
     name: 'SongList',
-    component: () => import("@/views/SongList.vue")
+    component: () => import("@/views/SongList.vue"),
+    meta:{
+      istrun:false
+    }
   }
 ]
 

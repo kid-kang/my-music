@@ -23,12 +23,14 @@ export default {
   neme: "Carousel",
   data () {
     return {
-      carouselList: [],
+      carouselList: JSON.parse(sessionStorage.getItem("carouselList")),
     }
   },
   created () {
+    if(sessionStorage.getItem("carouselList")) return
     this.axios.get("/banner?typle=2").then(res => {
       this.carouselList = res.banners.slice(0, 4)
+      sessionStorage.setItem("carouselList",JSON.stringify(this.carouselList))
     })
   }
 }

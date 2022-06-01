@@ -15,7 +15,7 @@ export default {
   name: "Navlink",
   data () {
     return {
-      activeName: 'first',
+      activeName: '/',
     }
   },
   methods: {
