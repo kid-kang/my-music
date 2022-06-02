@@ -1,4 +1,4 @@
-import { ElButton, ElTabPane, ElTabs, ElCarousel, ElCarouselItem } from 'element-plus'
+import { ElButton, ElTabPane, ElTabs, ElCarousel, ElCarouselItem, } from 'element-plus'
 
 
 let needEle = [ElButton, ElTabPane, ElTabs, ElCarousel, ElCarouselItem]

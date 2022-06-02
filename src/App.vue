@@ -1,13 +1,15 @@
 <template>
   <Navlink v-show="$route.meta.istrun"/>
   <router-view />
+  <FooterMusic/>
 </template>
 
 <script>
 import Navlink from "@/components/Navlink.vue"
+import FooterMusic from "@/components/FooterMusic.vue"
 export default {
   name: "App",
-  components: { Navlink }
+  components: { Navlink ,FooterMusic}
 }
 </script>
 
