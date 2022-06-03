@@ -11,11 +11,18 @@ export default createStore({
       }
     ],
     index:0,
-    play:false
+    play:false,
   },
   mutations: {
-    changePlay(){
-      this.state.play = !this.state.play
+    changePlay(state){
+      state.play = !this.state.play
+    },
+    changePlayList(state,arr){
+      state.palyList = arr
+      state.index = 0
+    },
+    changeIndex(state,index){
+      state.index = index
     }
   },
   actions: {

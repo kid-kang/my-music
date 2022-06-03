@@ -86,6 +86,7 @@ video {
   font: inherit;
   font-weight: normal;
   vertical-align: baseline;
+  z-index: 0;
 }
 article,
 aside,

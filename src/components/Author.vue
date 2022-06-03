@@ -1,5 +1,6 @@
 <template>
   <div class="wrap">
+    <!-- 歌单信息 -->
     <img :src="playlist.coverImgUrl" class="bg" />
     <div class="content">
       <img :src="playlist.coverImgUrl" />
@@ -16,12 +17,13 @@
         </p>
       </div>
     </div>
+    <!-- 歌曲列表 -->
     <div class="songlist">
       <div
         class="songitem"
         v-for="(val, i) in playlist.tracks"
         :key="val.id"
-        @click="getSong(val.id)"
+        @click="changeIndex(i)"
       >
         <span class="xuhao">{{ i + 1 }}</span>
         <div class="songname">
@@ -37,6 +39,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 
 export default {
   name: "Author",
@@ -47,12 +50,7 @@ export default {
   },
   props: ["playlist"],
   methods: {
-    getSong (id) {
-      console.log(id)
-      this.axios.get(`/song/detail?ids=347230`).then(res => {
-        console.log(res)
-      })
-    }
+    ...mapMutations(["changeIndex"]),
   },
 }
 </script>

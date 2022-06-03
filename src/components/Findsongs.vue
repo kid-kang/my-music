@@ -13,17 +13,15 @@
         arrow="never "
       >
         <el-carousel-item v-for="val in findList" :key="val.id">
-          <router-link :to="`/songList?id=${val.id}`">
-            <div class="inner">
-              <img :src="val.picUrl" />
-              <h3>{{ val.name }}</h3>
-              <span>
-                <svg class="icon" aria-hidden="true">
-                  <use xlink:href="#icon-yinle"></use></svg
-                >{{ (val.playCount % 1000) / 10 }}万
-              </span>
-            </div>
-          </router-link>
+          <div class="inner" @click="$router.push(`/songList?id=${val.id}`)">
+            <img :src="val.picUrl" />
+            <h3>{{ val.name }}</h3>
+            <span>
+              <svg class="icon" aria-hidden="true">
+                <use xlink:href="#icon-yinle"></use></svg
+              >{{ (val.playCount % 1000) / 10 }}万
+            </span>
+          </div>
         </el-carousel-item>
       </el-carousel>
     </div>
