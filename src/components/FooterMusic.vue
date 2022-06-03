@@ -43,11 +43,24 @@
             {{ palyList[index].name }}
           </div>
         </div>
-        <!-- 歌词部分 -->
-        <div class="geci">
-          <img src="@/assets/1.png" class="cip" />
-          <img src="@/assets/2.png" class="ciz"  />
-          <img :src="palyList[index].picUrl" class="tup" />
+        <!-- 歌曲详情部分 -->
+        <div class="musicDetail">
+          <!-- 磁盘界面 -->
+          <div class="cd" v-if="isLrc">
+            <img src="@/assets/1.png" class="cip" />
+            <img
+              src="@/assets/2.png"
+              class="ciz"
+              :class="{ cizActive: play }"
+            />
+            <img
+              :src="palyList[index].picUrl"
+              class="tup"
+              :class="{ tupRotateStop: !play, tupRotateStart: play }"
+            />
+          </div>
+          <!-- 歌词界面 -->
+          <div class="geci" v-else>歌词啊</div>
         </div>
         <!-- 底部控制播放部分 -->
         <div class="bofang">
@@ -79,7 +92,8 @@ export default {
   name: "FooterMusic",
   data () {
     return {
-      mask: false
+      mask: false,
+      isLrc: false
     }
   },
   computed: { ...mapState(["palyList", "index", "play"]) },
@@ -106,6 +120,12 @@ export default {
         if (!this.play) this.changePlay()
       })
     }
+  },
+  created () {
+    this.$store.dispatch("getLrc", this.palyList[this.index].id)
+  },
+  updated () {
+    this.$store.dispatch("getLrc", this.palyList[this.index].id)
   }
 }
 </script>
@@ -184,48 +204,72 @@ export default {
           transform: translate(50%, 0%);
         }
       }
-      .geci {
+      .musicDetail {
         width: 100%;
         height: 84%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         position: relative;
-        .ciz {
-          width: 2rem;
-          height: 3rem;
-          position: absolute;
-          left: 46%;
-          transform-origin: 0 0;
-          transform: rotate(-15deg);
-          transition: 2s;
+        .cd {
+          width: 100%;
+          height: 84%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .ciz {
+            width: 2rem;
+            height: 3rem;
+            position: absolute;
+            left: 46%;
+            transform-origin: 0 0;
+            transform: rotate(-15deg);
+            transition: 2s;
+          }
+          .cizActive {
+            transform: rotate(6deg);
+          }
+          .cip {
+            width: 5rem;
+            height: 5rem;
+            position: absolute;
+            bottom: 4.2rem;
+            z-index: -1;
+          }
+          @keyframes tupRotate {
+            0% {
+              transform: rotateZ(0deg);
+            }
+            100% {
+              transform: rotateZ(360deg);
+            }
+          }
+          .tup {
+            position: absolute;
+            width: 3.2rem;
+            height: 3.2rem;
+            border-radius: 50%;
+            bottom: 5.04rem;
+            animation: tupRotate 10s;
+          }
+          .tupRotateStart {
+            animation-play-state: running;
+          }
+          .tupRotateStop {
+            animation-play-state: paused;
+          }
         }
-        .cizActive{
-          transform: rotate(6deg);
-        }
-        .cip {
-          width: 5rem;
-          height: 5rem;
-          position: absolute;
-          bottom: 4.2rem;
-          z-index: -1;
-        }
-        .tup {
-          position: absolute;
-          width: 3.2rem;
-          height: 3.2rem;
-          border-radius: 50%;
-          bottom: 5.04rem;
+        .geci {
+          width: 100%;
+          height: 84%;
         }
       }
+
       .bofang {
         width: 100%;
         height: 10%;
         display: flex;
         justify-content: space-around;
         align-items: center;
-        .ciyao{
-          width: .5rem;
+        .ciyao {
+          width: 0.5rem;
         }
       }
     }
