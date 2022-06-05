@@ -1,6 +1,6 @@
 <template>
-  <div class="top">
-    <div class="back" @click="back">
+  <div class="top" v-show="!enterMusicDetail">
+    <div class="back" @click.once="back">
       <img src="../../public/back.png" />
     </div>
     <div class="author">
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations ,mapState} from 'vuex'
 import Author from "../components/Author.vue"
 export default {
   name: "SongList",
@@ -26,19 +26,15 @@ export default {
     ...mapMutations(["changePlayList"]),
     back () {
       this.$router.go(-1)
-    },
-    async getMusic (id) {
-      // ----------------------------------点击播放-----------------------
     }
   },
+  computed: { ...mapState(["enterMusicDetail"]) },
   created () {
     this.axios.get(`/playlist/detail?id=${this.$route.query.id}`).then(res => {
       this.playlist = res.playlist
-      console.log(this.playlist)
       const arr = this.playlist.tracks.map(val => ({
-        id: val.id, name: val.name, author: val.ar.map(item => item.name), picUrl: val.al.picUrl
+        id: val.id, name: val.name, author: val.ar.slice(0,2).map(item => item.name), picUrl: val.al.picUrl
       }))
-      console.log(arr)
       this.changePlayList(arr)
     })
   }
@@ -52,7 +48,7 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 999;
+  z-index: 9;
   width: 100%;
   height: 0.7rem;
   .back {

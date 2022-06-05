@@ -29,7 +29,9 @@
         <div class="songname">
           <h3>{{ val.name }}</h3>
           <p>
-            <span v-for="item in val.ar" :key="item.id">{{ item.name }}</span>
+            <span v-for="item in val.ar.slice(0, 2)" :key="item.id">{{
+              item.name
+            }}</span>
           </p>
         </div>
       </div>

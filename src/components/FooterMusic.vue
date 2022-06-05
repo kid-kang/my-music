@@ -1,8 +1,10 @@
 <template>
-  <div class="wrap" @click="mask = !mask">
+  <div class="wrap" @click="enterMusicDetail()">
     <img :src="palyList[index].picUrl" />
     <div class="songname">
-      <h3>{{ palyList[index].name }}</h3>
+      <h3>
+        <Vue3Marquee> {{ palyList[index].name }}&#12288;</Vue3Marquee>
+      </h3>
       <p>
         <span>歌手：</span>
         <span
@@ -35,18 +37,23 @@
       <div class="mask">
         <img :src="palyList[index].picUrl" class="bg" />
         <!-- 返回按钮顶部部分 -->
-        <div class="top">
+        <div class="toptop">
+          <!-- 返回按钮 -->
           <div class="back" @click="handleClose()">
             <img src="../../public/back.png" />
           </div>
+          <div class="name">
+            <Vue3Marquee> {{ palyList[index].name }}&#12288;</Vue3Marquee>
+          </div>
           <div class="author">
-            {{ palyList[index].name }}
+            <p class="one">演奏者:</p>
+            <p class="two">{{ palyList[index].author[0] }}</p>
           </div>
         </div>
         <!-- 歌曲详情部分 -->
         <div class="musicDetail">
           <!-- 磁盘界面 -->
-          <div class="cd" v-if="isLrc">
+          <div class="cd" v-if="!isLrc" @click="isLrc = !isLrc">
             <img src="@/assets/1.png" class="cip" />
             <img
               src="@/assets/2.png"
@@ -60,7 +67,10 @@
             />
           </div>
           <!-- 歌词界面 -->
-          <div class="geci" v-else>歌词啊</div>
+<!--  -------------------------------------------------------------------------------------- -->
+          <div class="geci" ref="geci" @click="isLrc = !isLrc" v-else>
+            <p v-for="val in lrc" :key="val.id" :class="{geciActive:(curTime*1000>=val.time && curTime*1000<val.next)}">{{ val.lrc }}</p>
+          </div>
         </div>
         <!-- 底部控制播放部分 -->
         <div class="bofang">
@@ -88,23 +98,43 @@
 
 <script>
 import { mapState, mapMutations } from "vuex"
+import { Vue3Marquee } from 'vue3-marquee'
+import 'vue3-marquee/dist/style.css'
 export default {
   name: "FooterMusic",
   data () {
     return {
       mask: false,
-      isLrc: false
+      isLrc: false,
+      timer: null
     }
   },
-  computed: { ...mapState(["palyList", "index", "play"]) },
+  components: { Vue3Marquee, },
+  computed: { ...mapState(["palyList", "index", "play", "lrc","curTime"]) },
   methods: {
-    ...mapMutations(["changePlay"]),
+    ...mapMutations(["changePlay", "changeEnterMusicDetail", "changeCurTime"]),
     playAudio () {
       this.changePlay()
-      this.play ? this.$refs.audio.play() : this.$refs.audio.pause()
+      if (this.play) {
+        this.$refs.audio.play()
+        this.setLrcTime()
+      } else {
+        this.$refs.audio.pause()
+        clearInterval(this.timer)
+      }
     },
     handleClose () {
+      this.changeEnterMusicDetail()
       this.$refs.drawer.handleClose()
+    },
+    enterMusicDetail () {
+      this.mask = !this.mask
+      this.changeEnterMusicDetail()
+    },
+    setLrcTime () {
+      this.timer = setInterval(() => {
+        this.changeCurTime(this.$refs.audio.currentTime)
+      }, 500)
     }
   },
   watch: {
@@ -116,9 +146,17 @@ export default {
     },
     palyList () {
       this.$nextTick(() => {
+        this.setLrcTime()
         this.$refs.audio.play()
         if (!this.play) this.changePlay()
       })
+    },
+    curTime(){
+      let p = document.querySelector("p.geciActive")
+      if(!p) return
+      if(p.offsetTop>300){
+        this.$refs.geci.scrollTop = p.offsetTop - 300
+      }
     }
   },
   created () {
@@ -146,12 +184,17 @@ export default {
   }
   .songname {
     height: 1.3rem;
+    width: 40%;
     display: flex;
     flex: 1;
     padding-left: 0.3rem;
     flex-direction: column;
     justify-content: space-around;
     text-align: left;
+    h3 {
+      overflow: hidden;
+      width: 80%;
+    }
     p {
       font-size: 0.26rem;
     }
@@ -179,12 +222,13 @@ export default {
         z-index: -1;
         filter: blur(1.5rem);
       }
-      .top {
+      .toptop {
         position: relative;
         display: flex;
         justify-content: space-between;
         width: 100%;
         height: 6%;
+        z-index: 9999;
         .back {
           height: 100%;
           img {
@@ -193,15 +237,37 @@ export default {
             margin-left: 0.2rem;
           }
         }
-        .author {
+        .name {
           position: absolute;
+          overflow: hidden;
           right: 50%;
           height: 100%;
+          width: 2rem;
           color: #fff;
           line-height: 0.8rem;
+          font-weight: 600 !important;
           font-size: 16px;
-          font-weight: 600;
           transform: translate(50%, 0%);
+        }
+        .author {
+          position: absolute;
+          right: 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          height: 100%;
+          width: 30%;
+          .one {
+            font-size: 0.24rem;
+            color: rgb(255, 255, 255);
+            text-align: start;
+          }
+          .two {
+            font-size: 0.26rem;
+            margin-right: 0.2rem;
+            text-align: end;
+            color: rgb(255, 255, 255);
+          }
         }
       }
       .musicDetail {
@@ -258,7 +324,22 @@ export default {
         }
         .geci {
           width: 100%;
-          height: 84%;
+          height: 95%;
+          overflow: scroll;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-top: 0.2rem;
+          p {
+            color: rgb(241, 241, 241);
+            margin-bottom: 0.4rem;
+            font-size: .28rem;
+          }
+          .geciActive{
+            color: #fff;
+            font-size: .32rem;
+            font-weight: 600;
+          }
         }
       }
 
@@ -268,6 +349,7 @@ export default {
         display: flex;
         justify-content: space-around;
         align-items: center;
+        z-index: 9999;
         .ciyao {
           width: 0.5rem;
         }

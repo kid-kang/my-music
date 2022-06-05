@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid'
 import { createStore } from 'vuex'
 import axios from "../plugins/axios"
 
@@ -13,7 +14,9 @@ export default createStore({
     ],
     index: 0,
     play: false,
-    lrc: ""
+    lrc: [],
+    enterMusicDetail:false,
+    curTime:0
   },
   mutations: {
     changePlay (state) {
@@ -28,13 +31,36 @@ export default createStore({
     },
     changeLrc (state, val) {
       state.lrc = val
+    },
+    changeEnterMusicDetail(state){
+      state.enterMusicDetail = !state.enterMusicDetail
+    },
+    changeCurTime(state,val) {
+      state.curTime = val
     }
   },
   actions: {
     async getLrc (context, id) {
       let res = await axios.get(`/lyric?id=${id}`)
-      console.log(res)
-      context.commit("changeLrc",res.lrc.lyric)
+      let format = res.lrc.lyric.split(/[(\r\n)\r\n]+/).map(val => {
+        let min,sec,mill,lrc,id
+        min = val.slice(1,3)
+        sec = val.slice(4,6)
+        mill = val.slice(7,10)
+        lrc = val.slice(11,)
+        id = nanoid()
+        if(isNaN(mill)){
+          mill = val.slice(7,9)
+          lrc = val.slice(10,)
+        }
+        let time = min*1000*60 + sec*1000 + mill*1
+        return{time,lrc,id}
+      })
+      format.forEach((val,i)=>{
+        let next = i === format.length-1 ? Infinity : format[i+1].time
+        val.next = next
+      })
+      context.commit("changeLrc",format)
     }
   },
   modules: {
