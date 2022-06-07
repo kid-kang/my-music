@@ -1,17 +1,24 @@
 <template>
   <div class="wrap">
     <div class="nav">
-      <img src="../../public/back.png" @click.once="$router.go(-1)"/>
+      <img src="../../public/back.png" @click.once="$router.go(-1)" />
       <input
         type="text"
         placeholder="歌曲/歌手/专辑"
         @keydown.enter="enterKey()"
         v-model="searKey"
+        ref="inputdata"
       />
     </div>
     <div class="history">
       <span class="spanHistory">历史:</span>
-      <span v-for="val in keyList" :key="val" class="spanKey" @click="sendSearch(val)">{{ val }}</span>
+      <span
+        v-for="val in keyList"
+        :key="val"
+        class="spanKey"
+        @click="sendSearch(val)"
+        >{{ val }}</span
+      >
       <img
         src="../../public/delete.png"
         class="delete"
@@ -29,7 +36,9 @@
         <div class="songname">
           <h3>{{ val.name }}</h3>
           <p>
-            <span v-for="item in val.artists.slice(0,2)" :key="item.id">{{item.name}}</span>
+            <span v-for="item in val.artists.slice(0, 2)" :key="item.id">{{
+              item.name
+            }}</span>
           </p>
         </div>
       </div>
@@ -57,7 +66,6 @@ export default {
 
       // 发起请求
       this.axios.get(`/search?keywords=${this.searKey}`).then(res => {
-        console.log(res)
         this.songList = res.result.songs
       })
 
@@ -70,21 +78,20 @@ export default {
     sendSearch (val) {
       this.axios.get(`/search?keywords=${val}`).then(res => {
         this.songList = res.result.songs
-        console.log(this.songList)
       })
     },
-    clickSong(val){
-      console.log({
-        id:val.id,name:val.name,author:val.artists.slice(0,2),picUrl:val.artists[0].img1v1Url
+    clickSong (val) {
+      this.$store.commit("searchAndPush", {
+        id: val.id, name: val.name, author: val.artists.slice(0, 2).map(item => item.name), picUrl: val.artists[0].img1v1Url
       })
-      this.$store.commit("searchAndPush",{
-        id:val.id,name:val.name,author:val.artists.slice(0,2).map(item => item.name),picUrl:val.artists[0].img1v1Url
-      })
-      this.$store.commit("changeIndex",this.$store.state.palyList.length-1)
+      this.$store.commit("changeIndex", this.$store.state.palyList.length - 1)
     }
   },
   created () {
     this.keyList = JSON.parse(localStorage.getItem("keyList")) || []
+  },
+  mounted(){
+    this.$refs.inputdata.focus()
   }
 }
 </script>

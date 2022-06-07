@@ -29,6 +29,7 @@ export default {
   created () {
     if(sessionStorage.getItem("carouselList")) return
     this.axios.get("/banner?typle=2").then(res => {
+      console.log(res)
       this.carouselList = res.banners.slice(0, 4)
       sessionStorage.setItem("carouselList",JSON.stringify(this.carouselList))
     })
@@ -38,6 +39,7 @@ export default {
 
 <style lang="less" scoped>
 .block {
+  margin-top: 1rem;
   .box {
     border-radius: 0.3rem;
     #topCarousel {

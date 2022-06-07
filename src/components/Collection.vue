@@ -23,9 +23,7 @@
         <div class="songname">
           <h3>{{ val.name }}</h3>
           <p>
-            <span v-for="item in val.author" :key="item">{{
-              item.name
-            }}</span>
+            <span v-for="item in val.author" :key="item">{{ item }}</span>
           </p>
         </div>
       </div>
@@ -35,18 +33,18 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 export default {
   name: "Collection",
   data () {
     return {
-      user: {},
-      likeList: []
+      user: {}
     }
   },
   methods: {
-    ...mapMutations(["changeIndex","changePlayList"]),
+    ...mapMutations(["changeIndex", "changePlayList"]),
   },
+  computed: { ...mapState(["palyList", "index"]) },
   async created () {
     this.axios.get(`/user/detail?uid=${this.$store.state.userId}`).then(res => {
       this.user = res.profile
@@ -56,12 +54,13 @@ export default {
     let ids = res.ids.join(",")
     let arr = await this.axios.get(`/song/detail?ids=${ids}`)
     let songs = arr.songs
-    // console.log(songs)
     songs = songs.map(val => ({
       id: val.id, name: val.name, author: val.ar.slice(0, 2).map(item => item.name), picUrl: val.al.picUrl
     }))
-    console.log(songs)
+    songs.push(this.palyList[this.index])
     this.changePlayList(songs)
+    this.changeIndex(songs.length - 1)
+    console.log(songs)
   }
 }
 </script>
@@ -69,6 +68,7 @@ export default {
 <style lang="less" scoped>
 .wrap {
   width: 100%;
+  margin-top: 1rem;
   .bg {
     width: 100%;
     height: 5rem;

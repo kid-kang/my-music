@@ -1,7 +1,7 @@
 <template>
-  <Navlink v-show="$route.meta.istrun"/>
+  <Navlink v-show="$route.meta.istrun&&!$store.state.enterMusicDetail" class="navlink"/>
   <router-view />
-  <FooterMusic />
+  <FooterMusic class="FooterMusic"/>
 </template>
 
 <script>
@@ -18,5 +18,12 @@ export default {
   font-family: Quicksand;
   text-align: center;
   color: #2c3e50;
+  position: relative;
+  .navlink{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+  }
 }
 </style>

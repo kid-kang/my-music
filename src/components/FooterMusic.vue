@@ -172,28 +172,28 @@ export default {
     },
   },
   watch: {
-    index () {
+    index (newVal) {
+      if (newVal === this.palyList.length) return
       this.$nextTick(() => {
-        this.$refs.audio.play()
-        if (!this.play) this.changePlay()
-      })
-    },
-    palyList () {
-      this.$nextTick(() => {
-        this.setLrcTime()
-        this.$refs.audio.play()
-        if (!this.play) this.changePlay()
+        let playPromise = this.$refs.audio.play()
+        if (playPromise !== undefined) {
+          playPromise.then(res => {
+            if (!this.play) this.changePlay()
+          }).catch(err => {
+            this.changeIndex(this.index === (this.palyList.length - 1) ? 0 : (this.index + 1))
+          })
+        }
       })
     },
     curTime (newval) {
       // 当前时间到达歌曲总时长时自动播放下一首
       if (newval >= this.totalTime) {
-        this.$nextTick(() => {
-          if (this.palyList.length === 1) this.$refs.audio.currentTime = 0
-          else this.changeIndex(this.index === (this.palyList.length - 1) ? 0 : (this.index + 1))
-        })
+        if (this.palyList.length === 1) this.$refs.audio.currentTime = 0
+        else this.changeIndex(this.index === (this.palyList.length - 1) ? 0 : (this.index + 1))
+        setTimeout(() => {
+          this.$forceUpdate()
+        }, 500)
       }
-      this.$forceUpdate()
       // 展现动态歌词
       let p = document.querySelector("p.geciActive")
       if (!p) return
@@ -372,13 +372,12 @@ export default {
           width: 100%;
           height: 95%;
           overflow: scroll;
-          // overflow: hidden;
           display: flex;
           flex-direction: column;
           align-items: center;
           p {
             color: rgb(241, 241, 241);
-            margin-bottom: 0.4rem;
+            margin-top: 0.4rem;
             font-size: 0.28rem;
           }
           .geciActive {

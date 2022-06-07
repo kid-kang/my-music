@@ -2,7 +2,7 @@
   <div class="wrap">
     <div class="top">
       <span>发现好歌单</span>
-      <el-button round size="default">查看更多</el-button>
+      <el-button round size="default" @click.once="$router.push('/recommend')">查看更多</el-button>
     </div>
     <div class="song">
       <el-carousel

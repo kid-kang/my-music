@@ -34,6 +34,14 @@ const routes = [
     meta:{
       istrun:false
     }
+  },
+  {
+    path: '/recommend',
+    name: 'Recommend',
+    component: () => import("@/views/Recommend.vue"),
+    meta:{
+      istrun:false
+    }
   }
 ]
 

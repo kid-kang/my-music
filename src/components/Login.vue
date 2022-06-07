@@ -49,7 +49,6 @@ export default {
       this.$refs.form.validate(async (bool) => {
         if (!bool) return
         let res = await this.axios.get(`/login/cellphone?phone=${this.form.user}&password=${this.form.password}`)
-        console.log(res)
         if (res.code === 200) {
           ElMessage({
             message: "登录成功",

@@ -23,19 +23,21 @@ export default {
   },
   components: { Author },
   methods: {
-    ...mapMutations(["changePlayList"]),
+    ...mapMutations(["changePlayList", "changeIndex"]),
     back () {
       this.$router.go(-1)
     }
   },
-  computed: { ...mapState(["enterMusicDetail"]) },
+  computed: { ...mapState(["enterMusicDetail", "palyList", "index", "play"]) },
   created () {
     this.axios.get(`/playlist/detail?id=${this.$route.query.id}`).then(res => {
       this.playlist = res.playlist
       const arr = this.playlist.tracks.map(val => ({
         id: val.id, name: val.name, author: val.ar.slice(0, 2).map(item => item.name), picUrl: val.al.picUrl
       }))
+      arr.push(this.palyList[this.index])
       this.changePlayList(arr)
+      this.changeIndex(arr.length-1)
     })
   }
 }

@@ -87,6 +87,7 @@ video {
   font-weight: normal;
   vertical-align: baseline;
   z-index: 0;
+  user-select: none;
 }
 article,
 aside,

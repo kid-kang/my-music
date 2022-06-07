@@ -5,7 +5,7 @@
     <div class="content">
       <img :src="playlist.coverImgUrl" />
       <div class="message">
-        <h2>{{ playlist.name }}</h2>
+        <p class="tatil">{{ playlist.name }}</p>
         <div class="avatar">
           <img :src="playlist.creator.avatarUrl" />
           <div>
@@ -87,6 +87,11 @@ export default {
       padding-left: 0.2rem;
       padding-right: 0.1rem;
       text-align: start;
+      .tatil {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
       .avatar {
         display: flex;
         justify-content: start;
@@ -100,15 +105,14 @@ export default {
           border-radius: 50%;
         }
         div {
-          width: 80%;
-          overflow: hidden;
-          word-break: break-all;
-          text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 2; /* 这里是超出几行省略 */
           display: flex;
           align-items: center;
+          width: 80%;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
         }
       }
       .dontShow {

@@ -2,7 +2,7 @@
   <nav>
     <div class="route">
       <div class="home" @click="$router.push('/')" :class="{active:$route.path == '/'}">发现好音乐</div>
-      <div class="me" @click="$router.push('/me')" :class="{active:$route.path == '/me'}">我的收藏</div>
+      <div class="me" @click="$router.push('/me')" :class="{active:$route.path == '/me'}">我的❤</div>
     </div>
     <svg class="icon sousuo" aria-hidden="true" @click="$router.push('/search')">
       <use xlink:href="#icon-sousuo"></use>
