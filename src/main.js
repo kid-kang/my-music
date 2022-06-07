@@ -7,6 +7,7 @@ import axios from './plugins/axios'
 
 const app = createApp(App)
 app.config.globalProperties.axios = axios
-app.config.globalProperties.baseURL = process.env.NODE_ENV === 'development'?"http://localhost:3000":""
+// app.config.globalProperties.baseURL = process.env.NODE_ENV === 'development'?"http://localhost:3000":""
+app.config.globalProperties.baseURL = "https://music-api-ten-sand.vercel.app"
 useElement(app)
 app.use(store).use(router).mount('#app')
