@@ -1,7 +1,7 @@
 <template>
   <Navlink v-show="$route.meta.istrun"/>
   <router-view />
-  <FooterMusic/>
+  <FooterMusic />
 </template>
 
 <script>

@@ -15,8 +15,10 @@ export default createStore({
     index: 0,
     play: false,
     lrc: [],
-    enterMusicDetail:false,
-    curTime:0
+    enterMusicDetail: false,
+    curTime: 0,
+    token: localStorage.getItem("token") || false,
+    userId: localStorage.getItem("userId") || 0
   },
   mutations: {
     changePlay (state) {
@@ -32,35 +34,46 @@ export default createStore({
     changeLrc (state, val) {
       state.lrc = val
     },
-    changeEnterMusicDetail(state){
+    changeEnterMusicDetail (state) {
       state.enterMusicDetail = !state.enterMusicDetail
     },
-    changeCurTime(state,val) {
+    changeCurTime (state, val) {
       state.curTime = val
+    },
+    searchAndPush (state, val) {
+      state.palyList.push(val)
+    },
+    setToken (state, val) {
+      localStorage.setItem("token", val)
+      state.token = val
+    },
+    setUserId (state, val) {
+      localStorage.setItem("userId", val)
+      state.userId = val
     }
   },
   actions: {
     async getLrc (context, id) {
       let res = await axios.get(`/lyric?id=${id}`)
       let format = res.lrc.lyric.split(/[(\r\n)\r\n]+/).map(val => {
-        let min,sec,mill,lrc,id
-        min = val.slice(1,3)
-        sec = val.slice(4,6)
-        mill = val.slice(7,10)
+        let min, sec, mill, lrc, id
+        min = val.slice(1, 3)
+        sec = val.slice(4, 6)
+        mill = val.slice(7, 10)
         lrc = val.slice(11,)
         id = nanoid()
-        if(isNaN(mill)){
-          mill = val.slice(7,9)
+        if (isNaN(mill)) {
+          mill = val.slice(7, 9)
           lrc = val.slice(10,)
         }
-        let time = min*1000*60 + sec*1000 + mill*1
-        return{time,lrc,id}
+        let time = min * 1000 * 60 + sec * 1000 + mill * 1
+        return { time, lrc, id }
       })
-      format.forEach((val,i)=>{
-        let next = i === format.length-1 ? Infinity : format[i+1].time
+      format.forEach((val, i) => {
+        let next = i === format.length - 1 ? Infinity : format[i + 1].time
         val.next = next
       })
-      context.commit("changeLrc",format)
+      context.commit("changeLrc", format)
     }
   },
   modules: {

@@ -146,9 +146,13 @@ export default {
         flex-direction: column;
         justify-content: center;
         height: 100%;
+        width: 90%;
         text-align: start;
         h3 {
           font-weight: 600;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         p {
           color: #ccc;

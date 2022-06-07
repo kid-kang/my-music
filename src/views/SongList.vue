@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapMutations ,mapState} from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import Author from "../components/Author.vue"
 export default {
   name: "SongList",
@@ -33,7 +33,7 @@ export default {
     this.axios.get(`/playlist/detail?id=${this.$route.query.id}`).then(res => {
       this.playlist = res.playlist
       const arr = this.playlist.tracks.map(val => ({
-        id: val.id, name: val.name, author: val.ar.slice(0,2).map(item => item.name), picUrl: val.al.picUrl
+        id: val.id, name: val.name, author: val.ar.slice(0, 2).map(item => item.name), picUrl: val.al.picUrl
       }))
       this.changePlayList(arr)
     })
@@ -56,7 +56,6 @@ export default {
     img {
       width: 0.7rem;
       height: 100%;
-      margin-left: 0.2rem;
     }
   }
   .author {
@@ -75,6 +74,9 @@ export default {
       margin-right: 0.2rem;
       text-align: end;
       color: rgb(255, 255, 255);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 }

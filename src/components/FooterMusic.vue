@@ -23,6 +23,7 @@
     <audio
       :src="`https://music.163.com/song/media/outer/url?id=${palyList[index].id}.mp3 `"
       ref="audio"
+      @canplay="canplaysong"
     ></audio>
     <!-- 显示唱片 -->
     <el-drawer
@@ -53,7 +54,7 @@
         <!-- 歌曲详情部分 -->
         <div class="musicDetail">
           <!-- 磁盘界面 -->
-          <div class="cd" v-if="!isLrc" @click="isLrc = !isLrc">
+          <div class="cd" v-show="!isLrc" @click="isLrc = !isLrc">
             <img src="@/assets/1.png" class="cip" />
             <img
               src="@/assets/2.png"
@@ -67,24 +68,49 @@
             />
           </div>
           <!-- 歌词界面 -->
-<!--  -------------------------------------------------------------------------------------- -->
-          <div class="geci" ref="geci" @click="isLrc = !isLrc" v-else>
-            <p v-for="val in lrc" :key="val.id" :class="{geciActive:(curTime*1000>=val.time && curTime*1000<val.next)}">{{ val.lrc }}</p>
+          <div class="geci" ref="geci" @click="isLrc = !isLrc" v-show="isLrc">
+            <p
+              v-for="val in lrc"
+              :key="val.id"
+              :class="{
+                geciActive:
+                  curTime * 1000 >= val.time && curTime * 1000 < val.next,
+              }"
+            >
+              {{ val.lrc }}
+            </p>
           </div>
         </div>
+        <!-- 进度条 -->
+        <input
+          type="range"
+          class="range"
+          min="0"
+          :max="totalTime"
+          v-model="$refs.audio.currentTime"
+          step="1"
+        />
         <!-- 底部控制播放部分 -->
         <div class="bofang">
           <svg class="icon ciyao" aria-hidden="true">
             <use xlink:href="#icon-20gl-repeat2"></use>
           </svg>
-          <svg class="icon ciyao" aria-hidden="true">
+          <svg
+            class="icon ciyao"
+            aria-hidden="true"
+            @click="changeIndex(index === 0 ? palyList.length - 1 : index - 1)"
+          >
             <use xlink:href="#icon-shangyishoushangyige"></use>
           </svg>
           <svg class="icon zhuyao" aria-hidden="true" @click.stop="playAudio()">
             <use xlink:href="#icon-bofang" v-if="!play"></use>
             <use xlink:href="#icon-zanting" v-else></use>
           </svg>
-          <svg class="icon ciyao" aria-hidden="true">
+          <svg
+            class="icon ciyao"
+            aria-hidden="true"
+            @click="changeIndex(index === palyList.length - 1 ? 0 : index + 1)"
+          >
             <use xlink:href="#icon-shangyishoushangyige1"></use>
           </svg>
           <svg class="icon ciyao" aria-hidden="true">
@@ -106,13 +132,14 @@ export default {
     return {
       mask: false,
       isLrc: false,
-      timer: null
+      timer: null,
+      totalTime: 0,
     }
   },
   components: { Vue3Marquee, },
-  computed: { ...mapState(["palyList", "index", "play", "lrc","curTime"]) },
+  computed: { ...mapState(["palyList", "index", "play", "lrc", "curTime"]) },
   methods: {
-    ...mapMutations(["changePlay", "changeEnterMusicDetail", "changeCurTime"]),
+    ...mapMutations(["changePlay", "changeEnterMusicDetail", "changeCurTime", "changeIndex"]),
     playAudio () {
       this.changePlay()
       if (this.play) {
@@ -133,9 +160,16 @@ export default {
     },
     setLrcTime () {
       this.timer = setInterval(() => {
-        this.changeCurTime(this.$refs.audio.currentTime)
+        try {
+          this.changeCurTime(this.$refs.audio.currentTime)
+        } catch (error) {
+          console.log(error)
+        }
       }, 500)
-    }
+    },
+    canplaysong () {
+      this.totalTime = parseInt(this.$refs.audio.duration)
+    },
   },
   watch: {
     index () {
@@ -151,10 +185,19 @@ export default {
         if (!this.play) this.changePlay()
       })
     },
-    curTime(){
+    curTime (newval) {
+      // 当前时间到达歌曲总时长时自动播放下一首
+      if (newval >= this.totalTime) {
+        this.$nextTick(() => {
+          if (this.palyList.length === 1) this.$refs.audio.currentTime = 0
+          else this.changeIndex(this.index === (this.palyList.length - 1) ? 0 : (this.index + 1))
+        })
+      }
+      this.$forceUpdate()
+      // 展现动态歌词
       let p = document.querySelector("p.geciActive")
-      if(!p) return
-      if(p.offsetTop>300){
+      if (!p) return
+      if (p.offsetTop > 300) {
         this.$refs.geci.scrollTop = p.offsetTop - 300
       }
     }
@@ -234,7 +277,7 @@ export default {
           img {
             width: 0.7rem;
             height: 100%;
-            margin-left: 0.2rem;
+            // margin-left: 0.2rem;
           }
         }
         .name {
@@ -265,6 +308,9 @@ export default {
           .two {
             font-size: 0.26rem;
             margin-right: 0.2rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             text-align: end;
             color: rgb(255, 255, 255);
           }
@@ -272,11 +318,11 @@ export default {
       }
       .musicDetail {
         width: 100%;
-        height: 84%;
+        height: 80.5%;
         position: relative;
         .cd {
           width: 100%;
-          height: 84%;
+          height: 100%;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -296,7 +342,7 @@ export default {
             width: 5rem;
             height: 5rem;
             position: absolute;
-            bottom: 4.2rem;
+            bottom: 3.6rem;
             z-index: -1;
           }
           @keyframes tupRotate {
@@ -312,8 +358,8 @@ export default {
             width: 3.2rem;
             height: 3.2rem;
             border-radius: 50%;
-            bottom: 5.04rem;
-            animation: tupRotate 10s;
+            bottom: 4.44rem;
+            animation: tupRotate 10s linear infinite;
           }
           .tupRotateStart {
             animation-play-state: running;
@@ -326,23 +372,29 @@ export default {
           width: 100%;
           height: 95%;
           overflow: scroll;
+          // overflow: hidden;
           display: flex;
           flex-direction: column;
           align-items: center;
-          margin-top: 0.2rem;
           p {
             color: rgb(241, 241, 241);
             margin-bottom: 0.4rem;
-            font-size: .28rem;
+            font-size: 0.28rem;
           }
-          .geciActive{
+          .geciActive {
             color: #fff;
-            font-size: .32rem;
+            font-size: 0.32rem;
             font-weight: 600;
+          }
+          &::-webkit-scrollbar {
+            width: 0px;
           }
         }
       }
-
+      .range {
+        width: 100%;
+        height: 0.5%;
+      }
       .bofang {
         width: 100%;
         height: 10%;

@@ -1,10 +1,10 @@
 <template>
   <nav>
-    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-      <el-tab-pane label="发现好音乐" name="/"></el-tab-pane>
-      <el-tab-pane label="我的收藏" name="/me"></el-tab-pane>
-    </el-tabs>
-      <svg class="icon sousuo" aria-hidden="true">
+    <div class="route">
+      <div class="home" @click="$router.push('/')" :class="{active:$route.path == '/'}">发现好音乐</div>
+      <div class="me" @click="$router.push('/me')" :class="{active:$route.path == '/me'}">我的收藏</div>
+    </div>
+    <svg class="icon sousuo" aria-hidden="true" @click="$router.push('/search')">
       <use xlink:href="#icon-sousuo"></use>
     </svg>
   </nav>
@@ -12,17 +12,7 @@
 
 <script>
 export default {
-  name: "Navlink",
-  data () {
-    return {
-      activeName: '/',
-    }
-  },
-  methods: {
-    handleClick (tab) {
-      this.$router.push(tab.props.name)
-    },
-  },
+  name: "Navlink"
 }
 </script>
 
@@ -33,11 +23,31 @@ nav {
   justify-content: space-around;
   align-items: center;
   height: 1rem;
-  .sousuo{
+  background-color: brown;
+  .route{
+    margin: auto;
+    display: flex;
+    height: 100%;
+    width: 70%;
+    justify-content: space-around;
+    align-items: center;
+    color: #fff;
+    .home,.me{
+      font-size: .28rem;
+      font-weight: 600;
+      line-height: 1rem;
+    }
+    .active{
+      color:skyblue;
+      border-bottom: 3px solid skyblue;
+    }
+  }
+  .sousuo {
     position: absolute;
-    right: .1rem;
-    top: 8px;
-    font-size: .5rem;
+    right: 0.1rem;
+    top: .24rem;
+    font-size: 0.5rem;
+    color: #fff;
   }
 }
 </style>

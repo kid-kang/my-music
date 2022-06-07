@@ -1,11 +1,14 @@
 <template>
-  <div>我的收藏</div>
+  <Login v-if="!$store.state.token"/>
+  <Collection v-else/>
 </template>
 
 <script>
-
+import Login from "@/components/Login.vue"
+import Collection from "@/components/Collection.vue"
 export default {
-  name:"Me"
+  name:"Me",
+  components:{Login,Collection}
 }
 </script>
 
