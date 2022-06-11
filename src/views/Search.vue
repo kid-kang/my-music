@@ -110,10 +110,13 @@ export default {
       height: 80%;
     }
     input {
+      user-select: none;
+      margin-top: 10px;
       margin-left: 0.4rem;
+      outline: none;
       border: none;
       border-bottom: 1px solid #999;
-      width: 90%;
+      width: 80%;
       height: 80%;
     }
   }

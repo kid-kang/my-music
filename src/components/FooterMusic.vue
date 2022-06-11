@@ -342,7 +342,7 @@ export default {
             width: 5rem;
             height: 5rem;
             position: absolute;
-            bottom: 3.6rem;
+            top: 2.1rem;
             z-index: -1;
           }
           @keyframes tupRotate {
@@ -358,7 +358,7 @@ export default {
             width: 3.2rem;
             height: 3.2rem;
             border-radius: 50%;
-            bottom: 4.44rem;
+            top: 2.94rem;
             animation: tupRotate 10s linear infinite;
           }
           .tupRotateStart {
