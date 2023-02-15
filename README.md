@@ -1,6 +1,16 @@
 # my-music
 ### 效果展示
+![](public/example1.png)
 
+![](public/example2.png)
+
+![](public/example3.png)
+
+![](public/example4.png)
+
+![](public/example5.png)
+
+![](public/example6.png)
 ## Project setup
 ```
 npm install
